@@ -13,19 +13,26 @@ export default class Form extends Component {
         country:["AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "GBP", "HKD", "HRK", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD","ZAR"],
         country1:"",
         country2:"",
+        baseCurrency: "",
     }
     }
     componentDidMount() {
-        axios.get('https://api.exchangeratesapi.io/latest').then(res => {
+        axios.get('https://api.exchangeratesapi.io/latest?').then(res => {
             const currencies = res.data;
-            this.setState({ currencies: res.data});
+            this.setState({ currencies: currencies});
             //console.log(currencies);
             //console.log(currency);
         }).catch(error => console.log(error));
     };
     showTest = async() => {
+        var baseCurrency = this.state.country1;
         console.log(this.state.currencies.rates)
-        this.state.currencies.map((count => console.log(count)))   
+        if (baseCurrency ==""){
+            alert("Please select a base currency");
+        }else{
+            alert(baseCurrency);
+         }
+        //this.state.currencies.map((count => console.log(count)))   
         return 1;
     };
 
@@ -34,7 +41,7 @@ export default class Form extends Component {
         
         return (
             <View style={styles.container}>
-                <Picker width={100} height={100}
+                <Picker style={styles.pickerContainer}
                     selectedValue={this.state.country1}
                     onValueChange={(itemValue, itemIndex) => this.setState({country1: itemValue})}>
                         {this.state.country.map((item, value) => {
@@ -43,7 +50,7 @@ export default class Form extends Component {
                 </Picker>
                 <TextInput style={styles.inputBox} placeholder="Currency 1"
                     placeholderTextColor="rgba(255,255,255,0.5)"></TextInput>
-                <Picker width={100} height={100}
+                <Picker style={styles.pickerContainer}
                     selectedValue={this.state.country2}
                     onValueChange={(itemValue, itemIndex) => this.setState({country2: itemValue})}>
                         {this.state.country.map((item, value) => {
@@ -56,9 +63,7 @@ export default class Form extends Component {
                 <TouchableOpacity style={styles.button} onPress={this.showTest}>
                     <Text style={styles.buttonText}>CONVERT</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>CURRENCY LIST</Text>
-                </TouchableOpacity>
+              
             </View>
         )
     };
@@ -69,6 +74,9 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         justifyContent: 'center'
+    },
+    pickerContainer:{
+        backgroundColor: 'rgba(255,255,255,0.7)',
     },
     inputBox: {
         width: 300,
