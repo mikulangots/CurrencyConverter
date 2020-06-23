@@ -21,7 +21,7 @@ export default class Form extends Component {
             currency2: 1.0,
             result2: 1.0,
         }
-        this.getData = this.getData.bind(this);
+        //this.getData = this.getData.bind(this);
     }
     componentDidMount() {
         axios.get('https://api.exchangeratesapi.io/latest').then(res => {
@@ -29,7 +29,9 @@ export default class Form extends Component {
             this.setState({ currencies: res.data });
             //console.log(currencies);
             this.setAllCurrencies();
+            this.getData();
         }).catch(error => console.log(error));
+        
     };
 
 
@@ -78,11 +80,13 @@ export default class Form extends Component {
         this.setState({ result1: this.state.currency[index.toString()] });
 
     };
+
     setCurrency2(value, index) {
         this.setState({ country2: value });
         this.setState({ currency2: this.state.currency[index.toString()] });
         this.setState({ result2: this.state.currency[index.toString()] });
     };
+
     calculateConversion = async () => {
         try {
             rate = 1 / (this.state.currency1 / this.state.currency2);
@@ -98,6 +102,8 @@ export default class Form extends Component {
         } catch (err) {
             console.log(err)
         }
+
+        
 
     };
 
